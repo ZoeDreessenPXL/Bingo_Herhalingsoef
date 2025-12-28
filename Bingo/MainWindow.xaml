@@ -1,0 +1,108 @@
+﻿<Window x:Class="Bingo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bingo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        Loaded="OnWindowLoaded">
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="Black"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock TextAlignment="Center" FontSize="30" Background="White" Grid.Row="0" Grid.Column="1" Width="100" Height="50" Margin="0 5 0 0"/>
+        <Button Name="startGameButton" Content="Start spel" Width="200" Height="40" Click="startGameButton_Click"/>
+        <Grid Grid.Row="1" Grid.RowSpan="3" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Label Content="Nummers" Foreground="White" Grid.Row="0" HorizontalAlignment="Center"/>
+            <ListBox Grid.Row="1" Margin="0 0 0 10"/>
+        </Grid>
+        <Grid Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Background="LightGreen" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="Speler 1" HorizontalAlignment="Center" FontSize="25" TextDecorations="Underline"/>
+                <Label Content="BINGO" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+            </StackPanel>
+            <Grid Name="player1Grid" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+            </Grid>
+            <StackPanel Grid.Row="2">
+                <Button Content="Wijzig naam" Margin="5" Padding="5"/>
+                <DockPanel>
+                    <Label Content="Score:" DockPanel.Dock="Left"/>
+                    <TextBlock Text="0" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right"/>
+                </DockPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Background="LightSalmon" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="Speler 2" HorizontalAlignment="Center" FontSize="25" TextDecorations="Underline"/>
+                <Label Content="BINGO" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+            </StackPanel>
+            <Grid Name="player2Grid" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+            </Grid>
+            <StackPanel Grid.Row="2">
+                <Button Content="Wijzig naam" Margin="5" Padding="5"/>
+                <DockPanel>
+                    <Label Content="Score:" DockPanel.Dock="Left"/>
+                    <TextBlock Text="0" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right"/>
+                </DockPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
