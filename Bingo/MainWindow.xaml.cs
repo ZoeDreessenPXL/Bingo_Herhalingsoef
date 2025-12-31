@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Bingo
 {
@@ -17,6 +18,8 @@ namespace Bingo
     public partial class MainWindow : Window
     {
         Random _random = new Random();
+        DispatcherTimer _timer = new DispatcherTimer();
+        List<int> _numbers;
 
         public MainWindow()
         {
@@ -55,9 +58,20 @@ namespace Bingo
                         label.VerticalContentAlignment = VerticalAlignment.Center;
                         label.BorderBrush = Brushes.Black;
                         label.BorderThickness = new Thickness(0.5, 0.5, 0.5, 0.5);
+                        label.MouseDoubleClick += Label_Clicked;
                         bingoGrid.Children.Add(label);
                     }
                 }
+            }
+        }
+
+        private void Label_Clicked(object sender, RoutedEventArgs e)
+        {
+            Label label = (Label)sender;
+            int.TryParse(label.Content.ToString(), out int number);
+            if (_numbers.Contains(number))
+            {
+                label.Background = Brushes.White;
             }
         }
 
@@ -121,6 +135,32 @@ namespace Bingo
         {
             GeneratePlayerCard(player1Grid);
             GeneratePlayerCard(player2Grid);
+            _numbers = new List<int>();
+   
+            _timer.Interval = TimeSpan.FromSeconds(5);
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+
+            chosenNumbersListBox.Items.Clear();
+            startGameButton.Visibility = Visibility.Hidden;
+            endGameButton.Visibility = Visibility.Visible;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            int number;
+            do
+            {
+                number = _random.Next(1, 76);
+            } while (_numbers.Contains(number));
+            _numbers.Add(number);
+            chosenNumbersListBox.Items.Add(number.ToString());
+            lastChosenNumberTextBlock.Text = number.ToString();
+        }
+
+        private void endGameButton_Click(object sender, RoutedEventArgs e)
+        {
+            _timer.Stop();
         }
     }
 }
