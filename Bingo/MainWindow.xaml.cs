@@ -20,6 +20,8 @@ namespace Bingo
         Random _random = new Random();
         DispatcherTimer _timer = new DispatcherTimer();
         List<int> _numbers;
+        int _player1Points = 0;
+        int _player2Points = 0;
 
         public MainWindow()
         {
@@ -126,17 +128,31 @@ namespace Bingo
                 }
                 sb.AppendLine();
             }
-            MessageBox.Show( sb.ToString() );
+            //MessageBox.Show( sb.ToString() );
         }
 
         private void playerWon(string name)
         {
-            // TODO:
-            // get player name belonging to the grid
-            // keep player score
             _timer.Stop();
             startGameButton.Visibility = Visibility.Visible;
-            MessageBox.Show($"Player {name} has won");
+            chosenNumbersListBox.Items.Clear();
+            lastChosenNumberTextBlock.Text = string.Empty;
+
+            string player;
+
+            if (name.Contains('1'))
+            {
+                player = player1NameTextBlock.Text;
+                _player1Points++;
+                player1PointsTextBlock.Text = _player1Points.ToString();
+            }
+            else
+            {
+                player = player2NameTextBlock.Text;
+                _player2Points++;
+                player2PointsTextBlock.Text = _player2Points.ToString();
+            }
+            MessageBox.Show($"{player} heeft gewonnen!");
         }
 
         private void GeneratePlayerCard(Grid bingoGrid)
@@ -147,6 +163,7 @@ namespace Bingo
 
             foreach (Label label in gridLabels)
             {
+                label.Background = Brushes.Transparent;
                 //Get row + columns for label:
                 int row = Grid.GetRow(label);
                 int col = Grid.GetColumn(label);
@@ -200,7 +217,6 @@ namespace Bingo
             _timer.Tick += Timer_Tick;
             _timer.Start();
 
-            chosenNumbersListBox.Items.Clear();
             startGameButton.Visibility = Visibility.Hidden;
         }
 
