@@ -42,7 +42,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel>
-                <TextBlock Text="Speler 1" HorizontalAlignment="Center" FontSize="25" TextDecorations="Underline"/>
+                <TextBlock Text="Speler 1" Name="player1NameTextBlock" HorizontalAlignment="Center" FontSize="25" TextDecorations="Underline"/>
                 <Label Content="BINGO" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
             </StackPanel>
             <Grid Name="player1Grid" Grid.Row="1">
@@ -65,7 +65,7 @@
                 <Button Content="Wijzig naam" Margin="5" Padding="5"/>
                 <DockPanel>
                     <Label Content="Score:" DockPanel.Dock="Left"/>
-                    <TextBlock Text="0" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right"/>
+                    <TextBlock Name="player1PointsTextBlock" Text="0" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right"/>
                 </DockPanel>
             </StackPanel>
         </Grid>
@@ -77,7 +77,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel>
-                <TextBlock Text="Speler 2" HorizontalAlignment="Center" FontSize="25" TextDecorations="Underline"/>
+                <TextBlock Text="Speler 2" Name="player2NameTextBlock" HorizontalAlignment="Center" FontSize="25" TextDecorations="Underline"/>
                 <Label Content="BINGO" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
             </StackPanel>
             <Grid Name="player2Grid" Grid.Row="1">
@@ -100,7 +100,7 @@
                 <Button Content="Wijzig naam" Margin="5" Padding="5"/>
                 <DockPanel>
                     <Label Content="Score:" DockPanel.Dock="Left"/>
-                    <TextBlock Text="0" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right"/>
+                    <TextBlock Name="player2PointsTextBlock" Text="0" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right"/>
                 </DockPanel>
             </StackPanel>
         </Grid>

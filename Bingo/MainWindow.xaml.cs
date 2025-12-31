@@ -81,6 +81,9 @@ namespace Bingo
             Label[] gridLabels = bingoGrid.Children.OfType<Label>().ToArray();
             Dictionary<int, List<int>> rows = new Dictionary<int, List<int>> { { 0, new List<int>() }, { 1, new List<int>() }, { 2, new List<int>() }, { 3, new List<int>() }, { 4, new List<int>() } };
             Dictionary<int, List<int>> cols = new Dictionary<int, List<int>> { { 0, new List<int>() }, { 1, new List<int>() }, { 2, new List<int>() }, { 3, new List<int>() }, { 4, new List<int>() } };
+            rows[2].Add(2);
+            cols[2].Add(2);
+
             foreach (Label label in gridLabels)
             {
                 if (label.Background == Brushes.White)
@@ -93,12 +96,16 @@ namespace Bingo
                 }
             }
 
-            // TODO: If a row or column is full, player has won
+            // TODO: If a diagonal line is full, player has won
             StringBuilder sb = new StringBuilder();
             // keep track of a full row
             foreach (var row in rows)
             {
                 sb.Append($"row: {row.Key}, col:");
+                if (row.Value.Count == 5)
+                {
+                    playerWon(bingoGrid.Name);
+                }
                 foreach (int col in row.Value)
                 {
                     sb.Append($"{col}, ");
@@ -109,6 +116,10 @@ namespace Bingo
             foreach (var col in cols)
             {
                 sb.Append($"col: {col.Key}, row:");
+                if (col.Value.Count == 5)
+                {
+                    playerWon(bingoGrid.Name);
+                }
                 foreach (int row in col.Value)
                 {
                     sb.Append($"{row}, ");
@@ -116,6 +127,16 @@ namespace Bingo
                 sb.AppendLine();
             }
             MessageBox.Show( sb.ToString() );
+        }
+
+        private void playerWon(string name)
+        {
+            // TODO:
+            // get player name belonging to the grid
+            // keep player score
+            _timer.Stop();
+            startGameButton.Visibility = Visibility.Visible;
+            MessageBox.Show($"Player {name} has won");
         }
 
         private void GeneratePlayerCard(Grid bingoGrid)
