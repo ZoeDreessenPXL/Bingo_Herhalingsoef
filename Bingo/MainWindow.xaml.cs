@@ -26,6 +26,9 @@ namespace Bingo
         public MainWindow()
         {
             InitializeComponent();
+
+            _timer.Interval = TimeSpan.FromSeconds(5);
+            _timer.Tick += Timer_Tick;
         }
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
@@ -85,6 +88,8 @@ namespace Bingo
             Dictionary<int, List<int>> cols = new Dictionary<int, List<int>> { { 0, new List<int>() }, { 1, new List<int>() }, { 2, new List<int>() }, { 3, new List<int>() }, { 4, new List<int>() } };
             rows[2].Add(2);
             cols[2].Add(2);
+            int diagonal1 = 0;
+            int diagonal2 = 0;
 
             foreach (Label label in gridLabels)
             {
@@ -98,16 +103,27 @@ namespace Bingo
                 }
             }
 
-            // TODO: If a diagonal line is full, player has won
+            // TODO: if one row is played, play untill two rows full
             StringBuilder sb = new StringBuilder();
             // keep track of a full row
             foreach (var row in rows)
             {
-                sb.Append($"row: {row.Key}, col:");
-                if (row.Value.Count == 5)
+                if ((row.Key == 0 && row.Value.Contains(0)) || (row.Key == 1 && row.Value.Contains(1)) 
+                    || (row.Key == 3 && row.Value.Contains(3)) || (row.Key == 4 && row.Value.Contains(4))) 
+                {
+                    diagonal1++;
+                }
+                if ((row.Key == 0 && row.Value.Contains(4)) || (row.Key == 1 && row.Value.Contains(3))
+                    || (row.Key == 3 && row.Value.Contains(1)) || (row.Key == 4 && row.Value.Contains(0)))
+                { 
+                    diagonal2++;
+                }
+                if (row.Value.Count == 5 || diagonal1 == 4 || diagonal2 == 4)
                 {
                     playerWon(bingoGrid.Name);
                 }
+
+                sb.Append($"row: {row.Key}, col:");
                 foreach (int col in row.Value)
                 {
                     sb.Append($"{col}, ");
@@ -213,8 +229,6 @@ namespace Bingo
             GeneratePlayerCard(player2Grid);
             _numbers = new List<int>();
    
-            _timer.Interval = TimeSpan.FromSeconds(5);
-            _timer.Tick += Timer_Tick;
             _timer.Start();
 
             startGameButton.Visibility = Visibility.Hidden;
