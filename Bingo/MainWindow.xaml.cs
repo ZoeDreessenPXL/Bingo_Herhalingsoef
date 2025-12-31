@@ -72,7 +72,50 @@ namespace Bingo
             if (_numbers.Contains(number))
             {
                 label.Background = Brushes.White;
+                checkCardFull((Grid)label.Parent);
             }
+        }
+
+        private void checkCardFull(Grid bingoGrid)
+        {
+            Label[] gridLabels = bingoGrid.Children.OfType<Label>().ToArray();
+            Dictionary<int, List<int>> rows = new Dictionary<int, List<int>> { { 0, new List<int>() }, { 1, new List<int>() }, { 2, new List<int>() }, { 3, new List<int>() }, { 4, new List<int>() } };
+            Dictionary<int, List<int>> cols = new Dictionary<int, List<int>> { { 0, new List<int>() }, { 1, new List<int>() }, { 2, new List<int>() }, { 3, new List<int>() }, { 4, new List<int>() } };
+            foreach (Label label in gridLabels)
+            {
+                if (label.Background == Brushes.White)
+                {
+                    int row = Grid.GetRow(label);
+                    int col = Grid.GetColumn(label);
+
+                    rows[row].Add(col);
+                    cols[col].Add(row);
+                }
+            }
+
+            // TODO: If a row or column is full, player has won
+            StringBuilder sb = new StringBuilder();
+            // keep track of a full row
+            foreach (var row in rows)
+            {
+                sb.Append($"row: {row.Key}, col:");
+                foreach (int col in row.Value)
+                {
+                    sb.Append($"{col}, ");
+                }
+                sb.AppendLine();
+            }
+            // keep track of a full column
+            foreach (var col in cols)
+            {
+                sb.Append($"col: {col.Key}, row:");
+                foreach (int row in col.Value)
+                {
+                    sb.Append($"{row}, ");
+                }
+                sb.AppendLine();
+            }
+            MessageBox.Show( sb.ToString() );
         }
 
         private void GeneratePlayerCard(Grid bingoGrid)
@@ -86,11 +129,6 @@ namespace Bingo
                 //Get row + columns for label:
                 int row = Grid.GetRow(label);
                 int col = Grid.GetColumn(label);
-
-                if (row == 2 && col == 2)
-                {
-                    continue;
-                }
 
                 int min = 0;
                 int max = 0;
@@ -143,7 +181,6 @@ namespace Bingo
 
             chosenNumbersListBox.Items.Clear();
             startGameButton.Visibility = Visibility.Hidden;
-            endGameButton.Visibility = Visibility.Visible;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -156,11 +193,6 @@ namespace Bingo
             _numbers.Add(number);
             chosenNumbersListBox.Items.Add(number.ToString());
             lastChosenNumberTextBlock.Text = number.ToString();
-        }
-
-        private void endGameButton_Click(object sender, RoutedEventArgs e)
-        {
-            _timer.Stop();
         }
     }
 }
