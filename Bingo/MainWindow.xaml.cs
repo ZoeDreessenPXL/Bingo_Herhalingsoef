@@ -22,15 +22,19 @@ namespace Bingo
         List<int> _numbers;
         int _player1Points = 0;
         int _player2Points = 0;
+        bool _oneRow;
+        bool _twoRows;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            // Set timer to generate a number every 5 seconds
             _timer.Interval = TimeSpan.FromSeconds(5);
             _timer.Tick += Timer_Tick;
         }
 
+        // Generate the bingo grid
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
             InitializeGrid(player1Grid);
@@ -70,6 +74,7 @@ namespace Bingo
             }
         }
 
+        // Check if clicked label is a chosen number
         private void Label_Clicked(object sender, RoutedEventArgs e)
         {
             Label label = (Label)sender;
@@ -81,6 +86,7 @@ namespace Bingo
             }
         }
 
+        // Checks the amount of full rows
         private void checkCardFull(Grid bingoGrid)
         {
             Label[] gridLabels = bingoGrid.Children.OfType<Label>().ToArray();
@@ -90,6 +96,7 @@ namespace Bingo
             cols[2].Add(2);
             int diagonal1 = 0;
             int diagonal2 = 0;
+            int rowsFull = 0;
 
             foreach (Label label in gridLabels)
             {
@@ -103,8 +110,6 @@ namespace Bingo
                 }
             }
 
-            // TODO: if one row is played, play untill two rows full
-            StringBuilder sb = new StringBuilder();
             // keep track of a full row
             foreach (var row in rows)
             {
@@ -118,42 +123,54 @@ namespace Bingo
                 { 
                     diagonal2++;
                 }
-                if (row.Value.Count == 5 || diagonal1 == 4 || diagonal2 == 4)
-                {
-                    playerWon(bingoGrid.Name);
-                }
 
-                sb.Append($"row: {row.Key}, col:");
-                foreach (int col in row.Value)
+                bool[] conditions = new bool[]
                 {
-                    sb.Append($"{col}, ");
-                }
-                sb.AppendLine();
+                    row.Value.Count == 5,
+                    diagonal1 == 4,
+                    diagonal2 == 4
+                };
+
+                rowsFull += conditions.Count(c => c);
             }
             // keep track of a full column
             foreach (var col in cols)
             {
-                sb.Append($"col: {col.Key}, row:");
                 if (col.Value.Count == 5)
                 {
-                    playerWon(bingoGrid.Name);
+                    rowsFull++;
                 }
-                foreach (int row in col.Value)
-                {
-                    sb.Append($"{row}, ");
-                }
-                sb.AppendLine();
             }
-            //MessageBox.Show( sb.ToString() );
+            // Send to check for how many rows playing
+            gameLevel(rowsFull, bingoGrid.Name);
         }
 
+        // Check how many rows playing and if a player has the needed amount
+        private void gameLevel(int rows, string name)
+        {
+            if (!_oneRow && rows >= 1)
+            {
+                playerWon(name);
+                _oneRow = true;
+            }
+            else if (!_twoRows && rows >= 2)
+            {
+                playerWon(name);
+                _twoRows = true;
+            }
+            else if (_twoRows && rows == 12)
+            {
+                _timer.Stop();
+                startGameButton.Visibility = Visibility.Visible;
+                chosenNumbersListBox.Items.Clear();
+                lastChosenNumberTextBlock.Text = string.Empty;
+                playerWon(name);
+            }
+        }
+
+        // Player has won
         private void playerWon(string name)
         {
-            _timer.Stop();
-            startGameButton.Visibility = Visibility.Visible;
-            chosenNumbersListBox.Items.Clear();
-            lastChosenNumberTextBlock.Text = string.Empty;
-
             string player;
 
             if (name.Contains('1'))
@@ -171,6 +188,7 @@ namespace Bingo
             MessageBox.Show($"{player} heeft gewonnen!");
         }
 
+        // Fill in the bingo cards with random numbers
         private void GeneratePlayerCard(Grid bingoGrid)
         {
             //Get all Label controls from Grid:
@@ -223,17 +241,20 @@ namespace Bingo
             }
         }
 
+        // Start game
         private void startGameButton_Click(object sender, RoutedEventArgs e)
         {
             GeneratePlayerCard(player1Grid);
             GeneratePlayerCard(player2Grid);
             _numbers = new List<int>();
-   
+            _oneRow = false;
+            _twoRows = false;
             _timer.Start();
 
             startGameButton.Visibility = Visibility.Hidden;
         }
 
+        // Generate new number
         private void Timer_Tick(object sender, EventArgs e)
         {
             int number;
